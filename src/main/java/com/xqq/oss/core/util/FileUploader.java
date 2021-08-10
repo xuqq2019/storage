@@ -1,4 +1,4 @@
-package com.example.demo.util;
+package com.xqq.oss.core.util;
 
 import java.io.IOException;
 import java.io.InputStream;

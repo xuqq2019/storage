@@ -1,0 +1,30 @@
+server:
+  servlet:
+    context-path: /oss
+spring:
+  servlet:
+    multipart:
+      max-file-size: 100MB
+      max-request-size: 100MB
+oss:
+  bucket:
+    file:
+      name: mobile-file
+  endpoint: http:192.168.1.182:9000
+  access:
+    key:
+      id: minio
+      secret: minioadmin
+  file:
+    min-storage: 1
+    max-storage: 10485760
+    cover: true
+  type: minio
+logging:
+  level:
+    root: info
+    com.xqq.oss: info
+  pattern:
+    console: "%d{yyyy/MM/dd-HH:mm:ss} [%thread] %-5level %logger- %msg%n"
+  file:
+    name: /logs/oss.log
