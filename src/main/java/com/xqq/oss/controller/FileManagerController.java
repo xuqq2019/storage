@@ -102,9 +102,20 @@ public class FileManagerController {
      * @author xuqq
      * @date 2020-10-05
      */
-    @DeleteMapping("/clear")
+    @DeleteMapping("/resource")
     public Result<Object> delete(String path) {
         return fileManagerService.delete(path);
+    }
+
+    /**
+     * 文件批量异步删除
+     * @param resources 上传文件到OSS时需要指定包含文件后缀在内的完整路径集合
+     * @author xuqq
+     * @date 2020-10-05
+     */
+    @PostMapping("/resource/async")
+    public Result<Object> asyncDelete(Set<String> resources) {
+        return fileManagerService.asyncDeleteResourceList(resources);
     }
 
     /**
