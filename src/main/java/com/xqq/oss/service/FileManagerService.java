@@ -60,6 +60,14 @@ public interface FileManagerService {
      */
     Result<Object> delete(String path);
     /**
+     * 文件删除
+     * @param resources 上传文件到OSS时需要指定包含文件后缀在内的完整路径集合，例如abc/efg/123.jpg
+     * @return Result
+     * @author xuqq
+     * @date 2021-08-12
+     */
+    Result<Object> asyncDeleteResourceList(Set<String> resources);
+    /**
      * 检查文件是否存在
      * @param path 上传文件到OSS时需要指定包含文件后缀在内的完整路径，例如abc/efg/123.jpg
      * @return Result

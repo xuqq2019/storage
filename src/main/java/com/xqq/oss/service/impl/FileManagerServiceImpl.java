@@ -273,6 +273,21 @@ public class FileManagerServiceImpl implements FileManagerService {
     }
 
     @Override
+    public Result<Object> asyncDeleteResourceList(Set<String> resources) {
+        //调用实例批量异步删除文件
+        CompletableFuture.supplyAsync(() -> deleteResourceList(resources));
+        return ResultGenerator.success();
+    }
+
+    public Result<Object> deleteResourceList(Set<String> resources) {
+        //调用实例批量删除文件
+        for (String path : resources) {
+            delete(path);
+        }
+        return ResultGenerator.success();
+    }
+
+    @Override
     public Result<Object> check(String path) {
         //调用实例删除文件
         ossProduce.check(path);
