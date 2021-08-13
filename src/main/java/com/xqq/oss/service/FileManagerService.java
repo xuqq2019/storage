@@ -112,9 +112,8 @@ public interface FileManagerService {
     /**
      * 文件预览
      * @param path 上传文件到OSS时需要指定包含文件后缀在内的完整路径，例如abc/efg/123.jpg
-     * @param rangeString range参数
      * @author xuqq
      * @date 2020-10-05
      */
-    void previewVideo(String path,String rangeString);
+    void previewVideo(String path);
 }

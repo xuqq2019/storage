@@ -86,14 +86,8 @@ public class FileManagerController {
      * @date 2020-10-05
      */
     @GetMapping("/preview")
-    public void preview(String path, HttpServletRequest request) {
-        // 有range的话
-        String rangeString = request.getHeader("Range");
-        if (rangeString != null && rangeString.contains("bytes=") && rangeString.contains("-")) {
-            fileManagerService.previewVideo(path,rangeString);
-        }else {
-            fileManagerService.previewFile(path);
-        }
+    public void preview(String path) {
+        fileManagerService.previewFile(path);
     }
 
     /**

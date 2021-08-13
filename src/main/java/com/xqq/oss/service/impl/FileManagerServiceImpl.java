@@ -459,7 +459,7 @@ public class FileManagerServiceImpl implements FileManagerService {
 
 
     @Override
-    public void previewVideo(String path,String rangeString){
+    public void previewVideo(String path){
         log.info("加载视频分片播放");
         InputStream is;
         ServletOutputStream servletOutputStream;
@@ -470,7 +470,9 @@ public class FileManagerServiceImpl implements FileManagerService {
             HttpServletResponse response = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getResponse();
             assert response != null;
             HttpServletRequest request = ((ServletRequestAttributes) Objects.requireNonNull(RequestContextHolder.getRequestAttributes())).getRequest();
-                // 坑爹地方一：http状态码要为206
+            // 有range的话
+            String rangeString = request.getHeader("Range");
+            // 坑爹地方一：http状态码要为206
                 //获取从那个字节开始读取文件
                 long range  = Long.parseLong(rangeString.substring(rangeString.indexOf("=") + 1, rangeString.indexOf("-")));
                 //文件名

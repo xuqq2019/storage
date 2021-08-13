@@ -5,9 +5,7 @@ import com.xqq.oss.service.FileManagerService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.annotation.Resource;
-import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 import java.util.Map;
 
@@ -32,7 +30,7 @@ public class VideoManagerController {
      * @author xuqq
      * @date 2020-10-05
      */
-    @PostMapping("/upload")
+    @PostMapping
     public Result<Object> upload(@RequestParam(value = "file",required = false) MultipartFile webFile) {
         return fileManagerService.uploadFile(webFile);
     }
@@ -55,14 +53,9 @@ public class VideoManagerController {
      * @date 2020-10-05
      */
     @GetMapping("/preview")
-    public void preview(String path, HttpServletRequest request) {
-        // 有range的话
-        String rangeString = request.getHeader("Range");
-        if (rangeString != null && rangeString.contains("bytes=") && rangeString.contains("-")) {
-            fileManagerService.previewVideo(path,rangeString);
-        }else {
-            fileManagerService.previewFile(path);
-        }
+    public void preview(String path) {
+        fileManagerService.previewVideo(path);
+
     }
 
     /**
