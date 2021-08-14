@@ -1,9 +1,8 @@
 package com.xqq.oss.config;
 
-import com.xqq.oss.config.CustomUnblockThreadPoolExecutor;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-
 import java.util.concurrent.ExecutorService;
 
 /**
@@ -14,6 +13,14 @@ import java.util.concurrent.ExecutorService;
  */
 @Configuration
 public class ExecutorConfig {
+    @Value("${thread.core-pool-size}")
+    private int corePoolSize;
+    @Value("${thread.maximum-pool-size}")
+    private int maximumPoolSize;
+    @Value("${thread.keep-alive-time}")
+    private int keepAliveTime;
+    @Value("${thread.blocking-queue.capacity}")
+    private int workQueueCapacity;
     /**
      * 初始化线程池
      * @author xuqq
@@ -23,7 +30,7 @@ public class ExecutorConfig {
     public ExecutorService executorServiceRegistrationBean() {
         CustomUnblockThreadPoolExecutor exec = new CustomUnblockThreadPoolExecutor();
         //1. 初始化
-        exec.init();
+        exec.init(corePoolSize,maximumPoolSize,keepAliveTime,workQueueCapacity);
         return exec.getCustomThreadPoolExecutor();
     }
 }

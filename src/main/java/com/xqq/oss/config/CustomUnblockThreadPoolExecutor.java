@@ -14,7 +14,7 @@ import java.util.concurrent.atomic.AtomicInteger;
  */
 public class CustomUnblockThreadPoolExecutor {
     private ThreadPoolExecutor pool = null;
- 
+
     /**
      * 线程池初始化方法
      *
@@ -28,23 +28,23 @@ public class CustomUnblockThreadPoolExecutor {
      * 							即当提交第9个任务时(前面线程都没有执行完,此测试方法中用sleep(100)),
      * 						          任务会交给RejectedExecutionHandler来处理
      */
- 
-    public void init() {
-        pool = new ThreadPoolExecutor(1,3,30,
-                TimeUnit.MINUTES, new ArrayBlockingQueue<>(100), new CustomThreadFactory(), new CustomRejectedExecutionHandler());
+
+    public void init(int corePoolSize, int maximumPoolSize, long keepAliveTime,int workQueueCapacity) {
+        pool = new ThreadPoolExecutor(corePoolSize,maximumPoolSize,keepAliveTime,
+                TimeUnit.MINUTES, new ArrayBlockingQueue<>(workQueueCapacity), new CustomThreadFactory(), new CustomRejectedExecutionHandler());
     }
- 
+
     public void destory() {
         if(pool !=null) {
             pool.shutdownNow();
         }
     }
- 
+
     public ExecutorService getCustomThreadPoolExecutor() {
         return this.pool;
     }
- 
- 
+
+
     private static class CustomRejectedExecutionHandler implements  RejectedExecutionHandler {
         @Override
         public void rejectedExecution(Runnable r, ThreadPoolExecutor executor) {
@@ -57,11 +57,11 @@ public class CustomUnblockThreadPoolExecutor {
             }
         }
     }
- 
+
     private static class CustomThreadFactory implements ThreadFactory {
- 
+
         private final AtomicInteger count = new AtomicInteger(0);
- 
+
         @Override
         public Thread newThread(Runnable runnable) {
             Thread t = new Thread(runnable);

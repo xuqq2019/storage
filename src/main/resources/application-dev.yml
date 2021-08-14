@@ -6,6 +6,12 @@ spring:
     multipart:
       max-file-size: 100MB
       max-request-size: 100MB
+thread:
+  core-pool-size: 4
+  maximum-pool-size: 8
+  keep-alive-time: 100
+  blocking-queue:
+    capacity: 100
 oss:
   bucket:
     file:
