@@ -1,4 +1,4 @@
-package com.xqq.oss.config;
+package com.xqq.oss.core.model;
 
 import com.xqq.oss.core.exception.ExecutorException;
 import com.xqq.oss.core.warn.ExceptionStatus;

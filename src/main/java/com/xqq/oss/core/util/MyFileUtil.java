@@ -14,7 +14,7 @@ import java.util.UUID;
  * @date 2020-10-13
  * @version v1.0
  */
-public class FileUtils {
+public class MyFileUtil {
 
     /**
      * 获取文件名

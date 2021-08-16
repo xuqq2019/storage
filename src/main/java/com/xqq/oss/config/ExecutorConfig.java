@@ -1,5 +1,6 @@
 package com.xqq.oss.config;
 
+import com.xqq.oss.core.model.CustomUnblockThreadPoolExecutor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

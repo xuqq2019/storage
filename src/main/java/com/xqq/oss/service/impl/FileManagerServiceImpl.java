@@ -8,7 +8,7 @@ import com.xqq.oss.core.model.ContentTypeEnum;
 import com.xqq.oss.core.model.FileTypeEnum;
 import com.xqq.oss.service.FileManagerService;
 import com.xqq.oss.service.ObjectStorageSystemService;
-import com.xqq.oss.core.util.FileUtils;
+import com.xqq.oss.core.util.MyFileUtil;
 import com.xqq.oss.core.util.MyIoUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.catalina.connector.ClientAbortException;
@@ -85,11 +85,11 @@ public class FileManagerServiceImpl implements FileManagerService {
                 throw new BusinessException(ExceptionStatus.FILE_NAME_NOT_EXISTS);
             } else {
                 //服务做分布式可考虑雪花算法
-                path = FileUtils.generatorRandomFileName(fileName);
+                path = MyFileUtil.generatorRandomFileName(fileName);
             }
-            String fileSuffix = FileUtils.suffixNameFromFileName(fileName);
+            String fileSuffix = MyFileUtil.suffixNameFromFileName(fileName);
             //校验文件类型是否为支持类型
-            FileUtils.validateFileType(fileSuffix);
+            MyFileUtil.validateFileType(fileSuffix);
             long size = file.getSize();
             if(size>fileSliceSize){
                 ossProduce.sliceUpload(path,file,fileSliceSize);
@@ -125,7 +125,7 @@ public class FileManagerServiceImpl implements FileManagerService {
             assert response != null;
             //校验对象是否存在，不存在返回提示
             inputStream = ossProduce.getObject(path);
-            String fileName = FileUtils.fileNameFromPath(path);
+            String fileName = MyFileUtil.fileNameFromPath(path);
             log.info("download file name :{}",fileName);
             //文件名必须转码，否者下载后文件名中有中文时会乱码
             fileName = new String(fileName.getBytes(StandardCharsets.UTF_8), StandardCharsets.ISO_8859_1);
@@ -178,7 +178,7 @@ public class FileManagerServiceImpl implements FileManagerService {
             //设置压缩流，直接写入response，实现边压缩边下载
             zipOutputStream.setMethod(ZipOutputStream.DEFLATED);
             for (String path : list) {
-                String fileName = FileUtils.fileNameFromPath(path);
+                String fileName = MyFileUtil.fileNameFromPath(path);
                 log.info("待下载的文件名称:{}",fileName);
                 // 校验文件是否存在
                 InputStream inputStream = ossProduce.getObject(path);
@@ -229,13 +229,13 @@ public class FileManagerServiceImpl implements FileManagerService {
             log.info("待预览的文件:{}", path);
             //涉及到word类型的文档预览将请求路径转换为pdf的请求路径
             String filePath = path;
-            String fileType = FileUtils.suffixNameFromFileName(path);
+            String fileType = MyFileUtil.suffixNameFromFileName(path);
             if (FileTypeEnum.PDF.getValue().equals(fileType)) {
                 response.setContentType(ContentTypeEnum.PDF.getValue());
             } else if (FileTypeEnum.DOC.getValue().equals(fileType)
                     || FileTypeEnum.DOCX.getValue().equals(fileType)
                     || FileTypeEnum.VISIO.getValue().equals(fileType)) {
-                filePath = FileUtils.pdfNameFromFileName(path);
+                filePath = MyFileUtil.pdfNameFromFileName(path);
                 response.setContentType(ContentTypeEnum.PDF.getValue());
             } else if (FileTypeEnum.JPG.getValue().equals(fileType) || FileTypeEnum.JPEG.getValue().equals(fileType)) {
                 response.setContentType(ContentTypeEnum.JPG.getValue());
@@ -245,7 +245,7 @@ public class FileManagerServiceImpl implements FileManagerService {
                 response.setContentType(ContentTypeEnum.XLS.getValue());
             } else {
                 //校验文件类型是否为支持类型
-                FileUtils.validateFileType(fileType);
+                MyFileUtil.validateFileType(fileType);
                 response.setContentType(ContentTypeEnum.MULTIPART.getValue());
             }
             inputStream = ossProduce.getObject(filePath);
@@ -363,7 +363,7 @@ public class FileManagerServiceImpl implements FileManagerService {
             assert response != null;
             log.info("待预览的图片路径:" + path);
             //根据文件类型去设置请求头的返回类型
-            String fileType = FileUtils.suffixNameFromFileName(path);
+            String fileType = MyFileUtil.suffixNameFromFileName(path);
             if (FileTypeEnum.JPG.getValue().equals(fileType) || FileTypeEnum.JPEG.getValue().equals(fileType)) {
                 response.setContentType(ContentTypeEnum.JPG.getValue());
             } else if (FileTypeEnum.PNG.getValue().equals(fileType)) {
@@ -441,7 +441,7 @@ public class FileManagerServiceImpl implements FileManagerService {
             }
             map.put("size", size);
             //随机生成唯一的存储路径
-            String filePath = FileUtils.generatorRandomImageName(imageType);
+            String filePath = MyFileUtil.generatorRandomImageName(imageType);
             // 上传文件到指定的存储空间（bucketName）并将其保存为指定的文件名称（objectName）
             ossProduce.upload(filePath, byteArrayInputStream);
             map.put("path", filePath);
@@ -476,7 +476,7 @@ public class FileManagerServiceImpl implements FileManagerService {
                 //获取从那个字节开始读取文件
                 long range  = Long.parseLong(rangeString.substring(rangeString.indexOf("=") + 1, rangeString.indexOf("-")));
                 //文件名
-                fileName = FileUtils.fileNameFromPath(path);
+                fileName = MyFileUtil.fileNameFromPath(path);
                 fileLength = ossProduce.getContentLength(path);
                 is = ossProduce.getObject(path, range, (1024 * 1024 * 2L));
                 //获取响应的输出流
